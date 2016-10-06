@@ -1,28 +1,22 @@
-var ws = require('ws');
-var express = require('express');
+var io = require('socket.io');
 var http = require('http');
 
-var app = express();
-var server = http.createServer(app).listen(2323, function() {
-  console.log('____ dark patterns ws server listening on 2323');
-});
-var wsServer = new ws.Server({
-  server: server
+var server = http.createServer(function(req, res) {
+  res.writeHead(404, {'Content-Type': 'text/html'});
+  res.end('<h1>Aw, snap! 404</h1>');
 });
 
-wsServer.on('connection', function(ws) {
-  console.log('new connection');
-  ws.on('message', function(message) {
-    console.log('received message: ', message);
-    wsServer.clients.forEach(function(client) {
-      client.send('pong', function(err, something) {
-        console.log('send: ', err, something);
-      });
-    });
-  });
+server.listen(2323, function() {
+  console.log('socket server listening on 2323');
+});
+io = io.listen(server);
 
+// Add a connect listener
+io.sockets.on('connection', function(socket){
+  console.log('Client connected.');
 
-  ws.on('close', function() {
-    console.log('closing ws server connection');
+  // Disconnect listener
+  socket.on('disconnect', function() {
+    console.log('Client disconnected.');
   });
 });
