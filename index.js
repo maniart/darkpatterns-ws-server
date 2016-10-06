@@ -15,25 +15,18 @@ io.sockets.on('connection', function(socket){
   console.log('Client connected.');
 
   socket.on('move', function(data) {
-    var id = data.id;
-    var axis = data.axis;
-    var value = data.value;
-    var name = data.name;
-    console.log('move', id, axis, value, name);
+    console.log('move', data);
+    socket.broadcast.emit('move', data);
   });
 
   socket.on('up', function(data) {
-    var id = data.id;
-    var num = data.num;
-    var name = data.name;
-    console.log('up', id, num, name);
+    console.log('up', data);
+    socket.broadcast.emit('up', data);
   });
 
   socket.on('down', function(data) {
-    var id = data.id;
-    var num = data.num;
-    var name = data.name;
-    console.log('down', id, num, name);
+    socket.broadcast.emit('down', data);
+    console.log('down', data);
   });
 
 
