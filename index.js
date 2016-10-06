@@ -11,12 +11,12 @@ var wsServer = new ws.Server({
 });
 
 wsServer.on('connection', function(ws) {
-
+  console.log('new connection');
   ws.on('message', function(message) {
     console.log('received message: ', message);
     wsServer.clients.forEach(function(client) {
-      client.send('ping', function(err) {
-        console.log('something went wrong while sending.');
+      client.send('pong', function(err, something) {
+        console.log('send: ', err, something);
       });
     });
   });
